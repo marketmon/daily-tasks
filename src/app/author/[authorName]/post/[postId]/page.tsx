@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import IndividualCardContent from "@/components/postCard/individual-card-content";
 import { fetchPost } from "@/db/queries/posts";
 import { getServerSession } from "next-auth";

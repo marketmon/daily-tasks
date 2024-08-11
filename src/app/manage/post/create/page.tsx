@@ -1,7 +1,7 @@
 import { createPost } from "@/app/actions/posts";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { formatPostDate } from "@/app/utils/post-date-format";
 import CreatePostForm from "@/components/create/create-post-form";
+import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth"
 import Link from "next/link";
 

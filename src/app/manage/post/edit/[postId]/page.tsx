@@ -1,4 +1,3 @@
-import { SmallButton } from "@/components/buttons/buttons";
 import EditPostForm from "@/components/edit/edit-post-form";
 import { fetchPost } from "@/db/queries/posts";
 import Link from "next/link";

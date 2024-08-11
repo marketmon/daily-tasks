@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { fetchAuthorByName } from "@/db/queries/authors";
 import Image from "next/image";
 import { formatPostDate } from "../utils/post-date-format";
+import { authOptions } from "@/lib/auth";
 
 export default async function Manage() {
 

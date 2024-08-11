@@ -2,7 +2,7 @@ import Link from "next/link"
 import SignedIn from "./auth/signed-in"
 import SignedOut from "./auth/signed-out"
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/lib/auth";
 
 export default async function HeaderNavBar() {
 

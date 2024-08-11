@@ -2,7 +2,6 @@
 
 // Import the database client and the Post type from Prisma
 import { db } from '@/db'
-import type { Task } from '@prisma/client'
 
 // Import the revalidatePath and redirect functions from Next.js
 import { revalidatePath } from 'next/cache'
