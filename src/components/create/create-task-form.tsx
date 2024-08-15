@@ -70,7 +70,7 @@ export default function CreateTaskForm(postId: PostId) {
                     value={taskContent}
                     onChange={(e) => setTaskContent(e.target.value)}
                     placeholder="Type your task"
-                    className="border p-2 rounded w-1/2"
+                    className="border p-2 rounded md:w-1/2 w-5/6"
                 />
                 <button onClick={handleAddTask} className="bg-blue-500 text-white p-2 ml-2">Add</button>
             </div>
@@ -81,9 +81,11 @@ export default function CreateTaskForm(postId: PostId) {
                             type="text"
                             value={task.content}
                             onChange={(e) => handleEditTask(task.tempId, e.target.value, e)}
-                            className="border p-2 flex-grow"
+                            className="border p-2 md:w-1/2 w-11/12"
                         />
-                        <button onClick={(e) => handleDeleteTask(task.tempId, e)} className="bg-red-500 text-white p-2 ml-2">Delete</button>
+                        <button onClick={(e) => handleDeleteTask(task.tempId, e)} className="bg-red-500 text-white p-1 mr-2 rounded">X</button>
+
+
                     </div>
                 ))}
             </div>

@@ -16,7 +16,7 @@ export default async function CreatePostPage() {
 
     return (
         <div className="z-50 absolute top-0 left-0 bg-base w-screen">
-            <div className="bg-white border-4 border-accent mx-10 my-3 p-5">
+            <div className="bg-white border-4 border-accent md:mx-10 mx-2 my-3 p-5">
                 <div className="w-full flex font-radley font-medium tracking-wide mb-3">
                     <div className="w-1/2">
                         <Link href="/manage">

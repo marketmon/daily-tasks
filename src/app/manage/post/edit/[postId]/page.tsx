@@ -21,7 +21,7 @@ export default async function EditPage({ params }: PostFetchProps) {
                         CANCEL
                     </button>
                 </Link>
-                <div className="bg-white border-4 border-accent mx-10 my-3 p-5">
+                <div className="bg-white border-4 border-accent md:mx-10 mx-2 my-3 p-5">
                     <EditPostForm post={post} />
                 </div>
             </div>

@@ -76,14 +76,14 @@ export default function IndividualCardContent(props: IndividualCardContentProps)
                                 Tasks:
                             </div>
                             <div className="font-normal text-lg">
-                                <ul className="ml-10">
+                                <ul className="ml-10 list-disc">
                                     {inProgressTasks.map((task) => {
                                         return (
                                             <div key={task.id} className="font-poppins">
                                                 {isOwner ?
-                                                    <div onClick={() => { handleClick(task) }} className="hover:line-through hover:cursor-pointer">
+                                                    <li onClick={() => { handleClick(task) }} className="hover:line-through hover:cursor-pointer">
                                                         {task.content}
-                                                    </div>
+                                                    </li>
                                                     :
                                                     <li>
                                                         {task.content}
@@ -96,14 +96,14 @@ export default function IndividualCardContent(props: IndividualCardContentProps)
                                 <br></br>
                                 <span className="font-bold italic text-lg font-roboto">Complete:</span>
 
-                                <ul className="ml-10">
+                                <ul className="ml-10 list-disc">
                                     {completedTasks.map((task) => {
                                         return (
                                             <div key={task.id} className="font-poppins text-sm">
                                                 {isOwner ?
-                                                    <div onClick={() => { handleClick(task) }} className="hover:line-through hover:cursor-pointer">
+                                                    <li onClick={() => { handleClick(task) }} className="hover:line-through hover:cursor-pointer">
                                                         {task.content}
-                                                    </div>
+                                                    </li>
                                                     :
                                                     <li>
                                                         {task.content}

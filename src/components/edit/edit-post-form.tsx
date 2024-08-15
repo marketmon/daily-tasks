@@ -212,10 +212,10 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                                 />
                                 <button
                                     type="button"
-                                    className="bg-red-500 text-white p-2 ml-2"
+                                    className="bg-red-500 text-white p-1 rounded ml-2"
                                     onClick={() => handleDeleteTask(taskId)}
                                 >
-                                    Delete
+                                    X
                                 </button>
                             </div>
                         ))}

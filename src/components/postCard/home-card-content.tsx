@@ -20,7 +20,7 @@ export default async function HomeCardContent({ name }: { name: string }) {
         const rollOverTasks = firstPostTasks.filter(task => task.postId !== postId)
 
         return (
-            <div className="w-full bg-white h-96 overflow-y-scroll">
+            <div className="w-full bg-white shadow py-5 h-fit">
 
                 <div className="w-full flex justify-between items-center p-1">
                     <div className="w-1/4">
@@ -64,19 +64,19 @@ export default async function HomeCardContent({ name }: { name: string }) {
                 <div className="w-full p-3">
                     <div className="text-xl font-roboto font-bold text-accent">Tasks:</div>
                     <div>
-                        <ul className="ml-2 text-balance">
+                        <ul className="ml-2 text-balance h-32 overflow-y-scroll list-disc">
                             {todayTasks?.map((task) => {
                                 const complete = task.phase === 'complete'
 
                                 return (
                                     <li key={task.id} className={`${complete && 'line-through'}`}>
-                                        {task.content}
+                                        - {task.content}
                                     </li>
                                 )
                             })}
                         </ul>
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-3 h-24 overflow-hidden">
                         <div className="text-md font-roboto font-bold text-accent italic">Roll Over:</div>
                         <ul className="ml-2">
                             <TaskList rollOverTasks={rollOverTasks} authorName={authorWithPosts.name} />

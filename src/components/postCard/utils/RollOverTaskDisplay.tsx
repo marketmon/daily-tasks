@@ -23,7 +23,7 @@ const TaskList: React.FC<Props> = ({ rollOverTasks, authorName }) => {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) =>
-                prevIndex + 2 >= rollOverTasks.length ? 0 : prevIndex + 2
+                prevIndex + 1 >= rollOverTasks.length ? 0 : prevIndex + 1
             );
         }, 5000); // Update every 5 seconds
 
@@ -32,21 +32,28 @@ const TaskList: React.FC<Props> = ({ rollOverTasks, authorName }) => {
 
     return (
         <ul className="ml-2">
-            {rollOverTasks
-                .slice(currentIndex, currentIndex + 2)
-                .map((task) => (
-                    <li key={task.id}>
-                        <Link
-                            href={`/author/${authorName.toLowerCase()}/post/${task.postId}`}
-                        >
-                            {task.content}
-                            <br />
-                            <div className="text-xs italic ml-3">
-                                from {formatPostDate(task.createdAt)}
-                            </div>
-                        </Link>
-                    </li>
-                ))}
+            {rollOverTasks.length > 0 ?
+                <div>
+                    {rollOverTasks
+                        .slice(currentIndex, currentIndex + 1)
+                        .map((task) => (
+                            <li key={task.id} className="list-disc">
+                                <Link
+                                    href={`/author/${authorName.toLowerCase()}/post/${task.postId}`}
+                                >
+                                    {task.content}
+                                    <br />
+                                    <div className="text-xs italic ml-3">
+                                        from {formatPostDate(task.createdAt)}
+                                    </div>
+                                </Link>
+                            </li>
+                        ))}
+                </div> :
+                <div className="text-center text-xs">
+                    none to report
+                </div>
+            }
         </ul>
     );
 };

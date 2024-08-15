@@ -19,8 +19,6 @@ export default async function FullPost({ params }: PostFetchProps) {
     const post = await fetchPost(postId);
     const session = await getServerSession(authOptions);
 
-
-
     if (post) {
 
         const isOwner = session?.user?.id === post.authorId

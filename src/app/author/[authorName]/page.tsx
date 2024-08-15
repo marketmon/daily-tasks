@@ -40,7 +40,7 @@ export default async function AuthorPage({ params }: PostFetchProps) {
 
 
         return (
-            <div className="bg-white border-4 border-accent mx-2 md:mx-10 my-3 p-5">
+            <div className="mx-2 md:mx-10 my-3 p-5">
                 <div className="flex items-center justify-center gap-10 font-rubik text-2xl italic text-accent text-center">
                     <Link
                         key={otherNames[0]}
@@ -77,10 +77,10 @@ export default async function AuthorPage({ params }: PostFetchProps) {
                                     </div>
                                 </Link>
                             </div>
-                            <div className="grid grid-cols-3 md:grid-cols-4 gap-1 w-full p-2 mx-auto overflow-hidden h-60">
+                            <div className="grid grid-rows-2 grid-cols-3 gap-1 w-full p-2 mx-auto">
                                 {authorWithPosts.post.map((post) => {
                                     return (
-                                        <div key={post.id} className="w-fit shadow h-fit">
+                                        <div key={post.id} className="w-24 shadow h-fit bg-white">
                                             <Link
                                                 key={authorName + '+' + post.id}
                                                 href={`/author/${authorName.toLowerCase()}/post/${post.id}`}
@@ -93,10 +93,10 @@ export default async function AuthorPage({ params }: PostFetchProps) {
                                                     :
                                                     <Image
                                                         src={post?.photo}
-                                                        width={50}
-                                                        height={50}
+                                                        width={96}
+                                                        height={96}
                                                         alt={post.id + 'photo'}
-                                                        className="w-24 h-24 aspect-square object-cover"
+                                                        className="w-24 aspect-square object-cover"
                                                     />}
                                                 <div className="text-xs text-center text-black py-1">{formatPostDate(post.createdAt)}</div>
                                             </Link>
@@ -111,34 +111,34 @@ export default async function AuthorPage({ params }: PostFetchProps) {
                                 height={100}
                                 width={100}
                                 alt="Ethan First Post Photo"
-                                className="w-60 aspect-square object-cover mx-auto"
+                                className="w-60 aspect-square mx-auto"
                             />
                         </div>
-                        <div className="w-1/3 font-poppins">
+                        <div className="md:w-1/3 w-full p-3 font-poppins flex bg-accent text-white text-center items-center">
                             {descriptions[authorKey]}
                         </div>
                     </div>
                 </div>
-                <div className="flex w-full px-10 mt-5 text-center font-poppins">
-                    <div className="w-1/2">
+                <div className="relative w-full flex-wrap font-poppins  mt-5">
+                    <div className="h-96 overflow-y-scroll">
                         <div className="font-bold">Completed Tasks:</div>
-                        <ul className="ml-2">
+                        <ul className="ml-2 list-disc">
                             {completeTasks?.map((task) => {
                                 return (
                                     <li key={task.id}>
-                                        {task.content}
+                                        - {task.content}
                                     </li>
                                 )
                             })}
                         </ul>
                     </div>
-                    <div className="w-1/2">
+                    <div className="mt-5 max-h-96 overflow-y-scroll">
                         <div className="font-bold">Outstanding Tasks:</div>
-                        <ul className="ml-2">
+                        <ul className="ml-2 list-disc">
                             {inprogressTasks?.map((task) => {
                                 return (
                                     <li key={task.id}>
-                                        {task.content}
+                                        - {task.content}
                                     </li>
                                 )
                             })}
