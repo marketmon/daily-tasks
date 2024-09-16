@@ -1,3 +1,4 @@
+import { MainButton } from "@/components/buttons/buttons";
 import EditPostForm from "@/components/edit/edit-post-form";
 import { fetchPost } from "@/db/queries/posts";
 import Link from "next/link";
@@ -16,12 +17,12 @@ export default async function EditPage({ params }: PostFetchProps) {
     if (post) {
         return (
             <div className="z-50 absolute top-0 left-0 bg-base w-screen">
-                <Link href="/manage" className="w-fit">
-                    <button className="tracking-wide font-radley px-2 pt-2">
-                        CANCEL
-                    </button>
-                </Link>
-                <div className="bg-white border-4 border-accent md:mx-10 mx-2 my-3 p-5">
+                <div className="p-2">
+                    <Link href="/manage" className="">
+                        <MainButton content="CANCEL" />
+                    </Link>
+                </div>
+                <div className="md:mx-10 mx-2 my-3">
                     <EditPostForm post={post} />
                 </div>
             </div>

@@ -155,25 +155,26 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                         {postId && (
                             <button
                                 type="button"
-                                className="bg-red-500 text-white p-2"
-                                onClick={
-                                    (e) => {
+                                className="bg-red-500 text-white p-2 rounded"
+                                onClick={async (e) => {
+                                    const confirmed = window.confirm("Are you sure you want to delete this post?");
+                                    if (!confirmed) {
+                                        e.preventDefault();
+                                        return;
+                                    }
+
+                                    try {
                                         if (photo) {
-                                            deletePostAndPhoto(postId, photo).catch(err => {
-                                                e.preventDefault()
-                                                console.error('Error deleting post:', err);
-                                                setError('An error occurred while deleting the post. Please try again.');
-                                            })
+                                            await deletePostAndPhoto(postId, photo);
                                         } else {
-                                            deletePost(postId).catch(err => {
-                                                e.preventDefault()
-                                                console.error('Error deleting post:', err);
-                                                setError('An error occurred while deleting the post. Please try again.');
-                                            })
+                                            await deletePost(postId);
                                         }
-
-                                    }}
-
+                                    } catch (err) {
+                                        e.preventDefault();
+                                        console.error('Error deleting post:', err);
+                                        setError('An error occurred while deleting the post. Please try again.');
+                                    }
+                                }}
                             >
                                 Delete
                             </button>
@@ -187,7 +188,7 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                         </div>
                     </Link>}
 
-                    <button type="submit" className="bg-green-500 text-white p-2">
+                    <button type="submit" className="bg-green-500 text-white p-2 rounded">
                         Save
                     </button>
                 </div>
@@ -197,22 +198,22 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                         <textarea
                             value={postContent}
                             onChange={handlePostContentChange}
-                            className="border w-full mt-2 p-2"
+                            className="border w-full mt-2 p-2 rounded h-32"
                         />
                     </div>
                     <div className="mt-5">
                         Existing Tasks:
                         {Object.entries(taskContents).map(([taskId, content]) => (
-                            <div key={taskId} className="mt-2 flex">
+                            <div key={taskId} className="mt-2 flex items-center">
                                 <input
                                     type="text"
                                     value={content}
                                     onChange={(e) => handleTaskContentChange(taskId, e.target.value)}
-                                    className="border w-full p-2"
+                                    className="border w-full p-2 rounded"
                                 />
                                 <button
                                     type="button"
-                                    className="bg-red-500 text-white p-1 rounded ml-2"
+                                    className="bg-red-500 text-white h-8 w-8 rounded ml-2"
                                     onClick={() => handleDeleteTask(taskId)}
                                 >
                                     X
@@ -223,20 +224,22 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                     <div className="mt-5">
                         New Tasks:
                         {newTasks.map((content, index) => (
-                            <div key={index} className="mt-2 flex">
+                            <div key={index} className="mt-2 flex items-center">
+
                                 <input
                                     type="text"
                                     value={content}
                                     onChange={(e) => handleNewTaskContentChange(index, e.target.value)}
-                                    className="border w-full p-2"
+                                    className="border w-full p-2 rounded"
                                 />
                                 <button
                                     type="button"
-                                    className="bg-red-500 text-white p-2 ml-2"
+                                    className="bg-red-500 text-white h-8 w-8 ml-2 rounded"
                                     onClick={() => handleDeleteNewTask(index)}
                                 >
-                                    Delete
+                                    X
                                 </button>
+
                             </div>
                         ))}
                         <div className="mt-2">
@@ -244,16 +247,17 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                                 type="text"
                                 value={newTaskContent}
                                 onChange={(e) => setNewTaskContent(e.target.value)}
-                                className="border w-full p-2"
+                                className="border w-full p-2 rounded"
                                 placeholder="New task content"
                             />
                             <button
                                 type="button"
-                                className="bg-blue-500 text-white p-2 mt-2"
+                                className="bg-blue-500 text-white p-2 mr-2 mt-2 rounded"
                                 onClick={handleAddTask}
                             >
-                                Add Task
+                                Add
                             </button>
+
                         </div>
                     </div>
                 </div>

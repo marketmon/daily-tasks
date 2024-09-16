@@ -3,6 +3,7 @@ import { getAllTasks } from "@/db/queries/tasks";
 import Link from "next/link";
 import Image from "next/image";
 import { formatPostDate } from "@/app/utils/post-date-format";
+import { SmallButton } from "@/components/buttons/buttons";
 
 interface PostFetchProps {
     params: {
@@ -67,38 +68,39 @@ export default async function AuthorPage({ params }: PostFetchProps) {
                 <div>
                     <div className="w-full md:flex md:justify-center flex-wrap mt-4">
                         <div className="md:w-1/3 w-full">
-                            <div className="w-full flex justify-between px-2 py-1  font-poppins">
-                                <div>
+                            <div className="w-full flex justify-between items-center px-2 py-1  font-poppins">
+                                <div className="font-bold">
                                     Posts:
                                 </div>
                                 <Link href={`/author/${authorName.toLowerCase()}/calendar`}>
-                                    <div className="font-radley">
-                                        see all
-                                    </div>
+                                    <SmallButton content="see all" />
                                 </Link>
                             </div>
-                            <div className="grid grid-rows-2 grid-cols-3 gap-1 w-full p-2 mx-auto">
+                            <div className="grid grid-cols-3 gap-1 mx-auto h-72 w-full overflow-hidden">
                                 {authorWithPosts.post.map((post) => {
                                     return (
-                                        <div key={post.id} className="w-24 shadow h-fit bg-white">
+                                        <div key={post.id} className="w-full shadow h-32 border-2 border-black rounded">
                                             <Link
                                                 key={authorName + '+' + post.id}
                                                 href={`/author/${authorName.toLowerCase()}/post/${post.id}`}
                                                 className=""
                                             >
                                                 {post?.photo === '' ?
-                                                    <div className="w-24 h-24 aspect-square">
-
+                                                    <div className="w-20 h-20 mt-2 object-cover mx-auto
+                                                    overflow-clip p-0.5 text-xs font-roboto text-center">
+                                                        {post.content.substring(0, 50)}...
                                                     </div>
                                                     :
                                                     <Image
                                                         src={post?.photo}
-                                                        width={96}
-                                                        height={96}
+                                                        width={72}
+                                                        height={72}
                                                         alt={post.id + 'photo'}
-                                                        className="w-24 aspect-square object-cover"
+                                                        className="h-2/3 w-fit aspect-square mx-auto mt-2 rounded object-cover"
                                                     />}
-                                                <div className="text-xs text-center text-black py-1">{formatPostDate(post.createdAt)}</div>
+                                                <div className="text-xs text-center text-black py-1 px-2">
+                                                    {formatPostDate(post.createdAt)}
+                                                </div>
                                             </Link>
                                         </div>
                                     )

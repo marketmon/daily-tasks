@@ -3,6 +3,7 @@ import SignedIn from "./auth/signed-in"
 import SignedOut from "./auth/signed-out"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth";
+import { MainButton } from "./buttons/buttons";
 
 export default async function HeaderNavBar() {
 
@@ -11,11 +12,9 @@ export default async function HeaderNavBar() {
     return (
         <div className="w-full p-3 flex font-radley font-medium tracking-wide">
             <div className="w-1/2">
-                <div className="bg-accent w-fit p-2 text-white text-sm flex justify-center items-center h-8">
-                    <Link href='/'>
-                        HOME
-                    </Link>
-                </div>
+                <Link href='/'>
+                    <MainButton content="HOME" />
+                </Link>
             </div>
             <div className="w-1/2 flex justify-end">
                 {session ?

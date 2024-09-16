@@ -32,6 +32,7 @@ export const metadata: Metadata = {
   description: "Keep up to date on the actions and happenings of Panbo founders, daily.",
 };
 
+
 export default async function RootLayout({
   children,
 }: Readonly<{

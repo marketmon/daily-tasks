@@ -3,7 +3,6 @@ import { formatPostDate } from "@/app/utils/post-date-format"
 import { getTasksByPostAndAuthor } from "@/db/queries/tasks"
 import Link from "next/link"
 import Image from "next/image"
-import { SmallButton } from "../buttons/buttons"
 import TaskList from "./utils/RollOverTaskDisplay"
 
 export default async function HomeCardContent({ name }: { name: string }) {
@@ -20,21 +19,30 @@ export default async function HomeCardContent({ name }: { name: string }) {
         const rollOverTasks = firstPostTasks.filter(task => task.postId !== postId)
 
         return (
-            <div className="w-full bg-white shadow py-5 h-fit">
+            <div className="w-full border-2 border-black shadow-lg py-5 h-max-96 rounded overflow-hidden">
 
-                <div className="w-full flex justify-between items-center p-1">
-                    <div className="w-1/4">
-
-                    </div>
+                <div className="w-full flex justify-between items-center px-5">
                     <Link
                         key={authorWithPosts.id + '+' + firstPost.id}
                         href={`/author/${authorWithPosts.name.toLowerCase()}/post/${firstPost.id}`}
                         className=""
                     >
-                        <div className="text-xl italic text-center">
+                        <div className="text-lg italic text-center font-roboto">
                             {formatPostDate(firstPost.createdAt)}
                         </div>
                     </Link>
+
+                    <Link
+                        key={authorWithPosts.id}
+                        href={`/author/${authorWithPosts.name.toLowerCase()}`}
+                        className=""
+                    >
+                        <div className="text-center text-2xl font-rubik font-bold text-accent italic">
+                            {name}
+                        </div>
+                    </Link>
+
+                    {/*
                     <Link
                         key={authorWithPosts.id}
                         href={`/author/${authorWithPosts.name.toLowerCase()}/calendar`}
@@ -42,48 +50,55 @@ export default async function HomeCardContent({ name }: { name: string }) {
                     >
                         <SmallButton content="ALL POSTS" />
                     </Link>
+                    */}
                 </div>
+
                 <Link
-                    key={authorWithPosts.id}
-                    href={`/author/${authorWithPosts.name.toLowerCase()}`}
-                    className=""
-                >
-                    <div className="text-center text-3xl font-rubik font-bold text-accent italic">
-                        {name.toUpperCase()}
+                    href={`/author/${authorWithPosts.name.toLowerCase()}/post/${firstPost.id}`}>
+                    <div className="w-full flex justify-center mt-5 px-3">
+                        {firstPost.photo && <Image
+                            src={firstPost.photo}
+                            height={100}
+                            width={100}
+                            alt={`${name} Recent Post Photo`}
+                            className="w-32 aspect-square object-cover rounded"
+                        />}
+                        {firstPost.content && <div className="h-32 truncate text-wrap px-5 text-sm">
+                            {firstPost.content}
+                        </div>}
                     </div>
                 </Link>
-                <div className="w-full flex justify-center">
-                    {firstPost.photo && <Image
-                        src={firstPost.photo}
-                        height={100}
-                        width={100}
-                        alt={`${name} Recent Post Photo`}
-                        className="w-32 aspect-square object-cover"
-                    />}
-                </div>
-                <div className="w-full p-3">
-                    <div className="text-xl font-roboto font-bold text-accent">Tasks:</div>
-                    <div>
-                        <ul className="ml-2 text-balance h-32 overflow-y-scroll list-disc">
-                            {todayTasks?.map((task) => {
-                                const complete = task.phase === 'complete'
+                <Link
+                    href={`/author/${authorWithPosts.name.toLowerCase()}/post/${firstPost.id}`}>
+                    <div className="w-full p-3" >
+                        <div className="text-lg font-roboto font-bold ">
+                            Tasks:
+                        </div>
+                        <div>
+                            <ul className="ml-10 text-balance h-32 list-disc text-sm">
+                                {todayTasks?.map((task) => {
+                                    const complete = task.phase === 'complete'
 
-                                return (
-                                    <li key={task.id} className={`${complete && 'line-through'}`}>
-                                        - {task.content}
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </div>
+                                    return (
+                                        <li key={task.id} className={`${complete && 'line-through'}`}>
+                                            {task.content}
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                        {/*
                     <div className="mt-3 h-24 overflow-hidden">
                         <div className="text-md font-roboto font-bold text-accent italic">Roll Over:</div>
                         <ul className="ml-2">
                             <TaskList rollOverTasks={rollOverTasks} authorName={authorWithPosts.name} />
                         </ul>
                     </div>
-                </div>
-            </div>
+                    */}
+                    </div>
+                </Link>
+
+            </div >
         )
     }
 
