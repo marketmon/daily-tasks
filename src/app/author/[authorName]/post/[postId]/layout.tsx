@@ -36,8 +36,8 @@ export default async function SinglePostLayout(
         if (desiredPost) {
             return (
                 <div className=" mx-3 my-1 p-2 md:mx-10 md:my-3 md:p-5">
-                    <div className="flex items-center w-full justify-center overflow-hidden">
-                        <div className="w-1/3 mr-3 italic font-radley md:text-lg text-sm flex justify-center">
+                    <div className="flex items-center w-full justify-center overflow-hidden font-roboto">
+                        <div className="w-1/3 mr-3 italic md:text-lg text-sm flex justify-center">
                             {postSliceBefore && <div className="">
                                 <Link
                                     key={authorWithPosts.id + '+' + postSliceBefore.id}
@@ -48,10 +48,10 @@ export default async function SinglePostLayout(
                             </div>}
                         </div>
 
-                        <div className="font-radley md:text-2xl font-bold w-1/3 text-center">
+                        <div className=" md:text-2xl font-bold w-1/3 text-center">
                             {formatPostDate(desiredPost.createdAt)}
                         </div>
-                        <div className="w-1/3 italic font-radley ml-3 md:text-lg text-sm text-nowrap flex justify-center">
+                        <div className="w-1/3 italic  ml-3 md:text-lg text-sm text-nowrap flex justify-center">
                             {postSliceAfter && <div>
 
                                 <Link

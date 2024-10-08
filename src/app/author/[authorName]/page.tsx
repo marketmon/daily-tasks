@@ -41,113 +41,117 @@ export default async function AuthorPage({ params }: PostFetchProps) {
 
 
         return (
-            <div className="mx-2 md:mx-10 my-3 p-5">
-                <div className="flex items-center justify-center gap-10 font-rubik text-2xl italic text-accent text-center">
+            <div className="mx-4 md:mx-12 p-6 bg-gray-50 rounded-lg shadow-lg">
+                {/* Author Names Section */}
+                <div className="flex items-center justify-center gap-8 font-rubik text-2xl italic text-accent text-center">
                     <Link
                         key={otherNames[0]}
                         href={`/author/${otherNames[0].toLowerCase()}`}
-                        className=""
+                        className="hover:underline transition duration-300"
                     >
-                        <div className="scale-90">
+                        <div className="hover:scale-95 transform transition duration-300">
                             {otherNames[0].toUpperCase()}
                         </div>
                     </Link>
-                    <div className="font-bold scale-150">
+                    <div className="font-bold text-3xl text-accent-dark">
                         {authorName.toUpperCase()}
                     </div>
                     <Link
                         key={otherNames[1]}
                         href={`/author/${otherNames[1].toLowerCase()}`}
-                        className=""
+                        className="hover:underline transition duration-300"
                     >
-                        <div className="scale-90">
+                        <div className="hover:scale-95 transform transition duration-300">
                             {otherNames[1].toUpperCase()}
                         </div>
                     </Link>
                 </div>
-                <div>
-                    <div className="w-full md:flex md:justify-center flex-wrap mt-4">
-                        <div className="md:w-1/3 w-full">
-                            <div className="w-full flex justify-between items-center px-2 py-1  font-poppins">
-                                <div className="font-bold">
-                                    Posts:
-                                </div>
-                                <Link href={`/author/${authorName.toLowerCase()}/calendar`}>
-                                    <SmallButton content="see all" />
-                                </Link>
-                            </div>
-                            <div className="grid grid-cols-3 gap-1 mx-auto h-72 w-full overflow-hidden">
-                                {authorWithPosts.post.map((post) => {
-                                    return (
-                                        <div key={post.id} className="w-full shadow h-32 border-2 border-black rounded">
-                                            <Link
-                                                key={authorName + '+' + post.id}
-                                                href={`/author/${authorName.toLowerCase()}/post/${post.id}`}
-                                                className=""
-                                            >
-                                                {post?.photo === '' ?
-                                                    <div className="w-20 h-20 mt-2 object-cover mx-auto
-                                                    overflow-clip p-0.5 text-xs font-roboto text-center">
-                                                        {post.content.substring(0, 50)}...
-                                                    </div>
-                                                    :
-                                                    <Image
-                                                        src={post?.photo}
-                                                        width={72}
-                                                        height={72}
-                                                        alt={post.id + 'photo'}
-                                                        className="h-2/3 w-fit aspect-square mx-auto mt-2 rounded object-cover"
-                                                    />}
-                                                <div className="text-xs text-center text-black py-1 px-2">
-                                                    {formatPostDate(post.createdAt)}
-                                                </div>
-                                            </Link>
+
+                {/* Posts and Image Section */}
+                <div className="w-full md:flex md:justify-center flex-wrap mt-6 gap-8">
+                    {/* Post section */}
+                    <div className="md:w-1/3 w-full">
+                        <div className="flex justify-between items-center px-4 py-2 bg-accent text-white rounded-md">
+                            <div className="font-bold">Posts:</div>
+                            <Link href={`/author/${authorName.toLowerCase()}/calendar`}>
+                                <SmallButton content="See All" />
+                            </Link>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4 mt-4 max-h-72 overflow-y-auto rounded-lg">
+                            {authorWithPosts.post.slice(0, 6).map((post) => (
+                                <div
+                                    key={post.id}
+                                    className="w-full h-32 shadow-md border border-gray-300 rounded overflow-hidden"
+                                >
+                                    <Link href={`/author/${authorName.toLowerCase()}/post/${post.id}`}>
+                                        {post?.photo === '' ? (
+                                            <div className="w-full h-24 bg-gray-200 flex items-center justify-center text-xs font-roboto text-gray-700 p-2">
+                                                {post.content.substring(0, 50)}...
+                                            </div>
+                                        ) : (
+                                            <Image
+                                                src={post?.photo}
+                                                width={72}
+                                                height={72}
+                                                alt={post.id + 'photo'}
+                                                className="h-24 w-full object-cover"
+                                            />
+                                        )}
+                                        <div className="text-center text-gray-700 py-2 text-xs">
+                                            {formatPostDate(post.createdAt)}
                                         </div>
-                                    )
-                                })}
-                            </div>
+                                    </Link>
+                                </div>
+                            ))}
                         </div>
-                        <div className="md:w-1/3 w-full ">
-                            <Image
-                                src={authorWithPosts.photo}
-                                height={100}
-                                width={100}
-                                alt="Ethan First Post Photo"
-                                className="w-60 aspect-square mx-auto"
-                            />
-                        </div>
-                        <div className="md:w-1/3 w-full p-3 font-poppins flex bg-accent text-white text-center items-center">
-                            {descriptions[authorKey]}
-                        </div>
+
+                    </div>
+
+                    {/* Author Image */}
+                    <div className="md:w-1/3 w-full flex justify-center mt-4 md:mt-0">
+                        <Image
+                            src={authorWithPosts.photo}
+                            height={150}
+                            width={150}
+                            alt="Author Photo"
+                            className="w-48 h-48 rounded-full object-contain shadow-lg"
+                        />
+                    </div>
+
+                    {/* Description Section */}
+                    <div className="md:w-1/3 w-full p-6 bg-accent text-white rounded-lg flex justify-center items-center text-center">
+                        {descriptions[authorKey]}
                     </div>
                 </div>
-                <div className="relative w-full flex-wrap font-poppins  mt-5">
-                    <div className="h-96 overflow-y-scroll">
-                        <div className="font-bold">Completed Tasks:</div>
-                        <ul className="ml-2 list-disc">
-                            {completeTasks?.map((task) => {
-                                return (
-                                    <li key={task.id}>
-                                        - {task.content}
-                                    </li>
-                                )
-                            })}
+
+                {/* Task Lists */}
+                <div className="w-full mt-8 space-y-6">
+                    {/* Completed Tasks */}
+                    <div className="max-h-48 overflow-y-auto bg-gray-100 p-4 rounded-lg shadow-sm">
+                        <div className="font-bold mb-2">Completed Tasks:</div>
+                        <ul className="ml-4 list-disc">
+                            {completeTasks?.map((task) => (
+                                <li key={task.id} className="text-sm">
+                                    {task.content}
+                                </li>
+                            ))}
                         </ul>
                     </div>
-                    <div className="mt-5 max-h-96 overflow-y-scroll">
-                        <div className="font-bold">Outstanding Tasks:</div>
-                        <ul className="ml-2 list-disc">
-                            {inprogressTasks?.map((task) => {
-                                return (
-                                    <li key={task.id}>
-                                        - {task.content}
-                                    </li>
-                                )
-                            })}
+
+                    {/* Outstanding Tasks */}
+                    <div className="max-h-48 overflow-y-auto bg-gray-100 p-4 rounded-lg shadow-sm">
+                        <div className="font-bold mb-2">Outstanding Tasks:</div>
+                        <ul className="ml-4 list-disc">
+                            {inprogressTasks?.map((task) => (
+                                <li key={task.id} className="text-sm">
+                                    {task.content}
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </div>
             </div>
+
         )
     }
 }

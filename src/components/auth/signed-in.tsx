@@ -7,7 +7,7 @@ export default function SignedIn() {
     const router = useRouter();
 
     return (
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
             <div
                 className="hover:cursor-pointer"
                 onClick={() => { router.push('/manage/post/create') }}

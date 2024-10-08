@@ -63,37 +63,51 @@ export default function CreateTaskForm(postId: PostId) {
     }
 
     return (
-        <form className="font-poppins" onSubmit={handleSubmit}>
-            <div className="task-input">
+        <form className="font-poppins w-full max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
+            <div className="flex items-center space-x-3 mb-6">
                 <input
                     type="text"
                     value={taskContent}
                     onChange={(e) => setTaskContent(e.target.value)}
                     placeholder="Type your task"
-                    className="border p-2 rounded md:w-1/2 w-5/6"
+                    className="border border-gray-300 p-3 rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
-                <button onClick={handleAddTask} className="bg-blue-500 text-white p-2 ml-2">Add</button>
+                <button
+                    onClick={handleAddTask}
+                    className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-md shadow-md transition duration-200 ease-in-out"
+                >
+                    Add
+                </button>
             </div>
-            <div className="task-list mt-4">
+
+            <div className="task-list space-y-4">
                 {tasks.map(task => (
-                    <div key={task.tempId} className="task-item flex items-center mb-2">
+                    <div key={task.tempId} className="flex items-center space-x-3">
                         <input
                             type="text"
                             value={task.content}
                             onChange={(e) => handleEditTask(task.tempId, e.target.value, e)}
-                            className="border p-2 md:w-1/2 w-11/12"
+                            className="border border-gray-300 p-3 rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
-                        <button onClick={(e) => handleDeleteTask(task.tempId, e)} className="bg-red-500 text-white p-1 mr-2 rounded">X</button>
-
-
+                        <button
+                            onClick={(e) => handleDeleteTask(task.tempId, e)}
+                            className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-md shadow-md transition duration-200 ease-in-out"
+                        >
+                            X
+                        </button>
                     </div>
                 ))}
             </div>
-            <div className="mb-4">
-                <button type="submit" className="bg-green-500 text-white p-2 ml-2">
+
+            <div className="mt-6">
+                <button
+                    type="submit"
+                    className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-md shadow-md transition duration-200 ease-in-out"
+                >
                     Submit
                 </button>
             </div>
         </form>
+
     )
 }

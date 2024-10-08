@@ -45,7 +45,8 @@ export default async function RootLayout({
       ${radley.variable} 
       ${roboto.variable} 
       ${poppins.variable}
-       bg-base`}
+      bg-gray-100
+       `}
       >
         <Providers>
           <HeaderNavBar />

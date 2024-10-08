@@ -19,15 +19,13 @@ export default async function HomeCardContent({ name }: { name: string }) {
         const rollOverTasks = firstPostTasks.filter(task => task.postId !== postId)
 
         return (
-            <div className="w-full border-2 border-black shadow-lg py-5 h-max-96 rounded overflow-hidden">
-
-                <div className="w-full flex justify-between items-center px-5">
+            <div className="w-full shadow-lg py-6 rounded-lg overflow-hidden bg-white">
+                <div className="w-full flex justify-between items-center px-6">
                     <Link
                         key={authorWithPosts.id + '+' + firstPost.id}
                         href={`/author/${authorWithPosts.name.toLowerCase()}/post/${firstPost.id}`}
-                        className=""
                     >
-                        <div className="text-lg italic text-center font-roboto">
+                        <div className="text-base italic font-roboto text-gray-500">
                             {formatPostDate(firstPost.createdAt)}
                         </div>
                     </Link>
@@ -35,70 +33,57 @@ export default async function HomeCardContent({ name }: { name: string }) {
                     <Link
                         key={authorWithPosts.id}
                         href={`/author/${authorWithPosts.name.toLowerCase()}`}
-                        className=""
                     >
-                        <div className="text-center text-2xl font-rubik font-bold text-accent italic">
-                            {name}
+                        <div className="text-xl font-medium text-accent font-rubik text-primary">
+                            {name.toUpperCase()}
                         </div>
                     </Link>
-
-                    {/*
-                    <Link
-                        key={authorWithPosts.id}
-                        href={`/author/${authorWithPosts.name.toLowerCase()}/calendar`}
-                        className=""
-                    >
-                        <SmallButton content="ALL POSTS" />
-                    </Link>
-                    */}
                 </div>
 
-                <Link
-                    href={`/author/${authorWithPosts.name.toLowerCase()}/post/${firstPost.id}`}>
-                    <div className="w-full flex justify-center mt-5 px-3">
-                        {firstPost.photo && <Image
-                            src={firstPost.photo}
-                            height={100}
-                            width={100}
-                            alt={`${name} Recent Post Photo`}
-                            className="w-32 aspect-square object-cover rounded"
-                        />}
-                        {firstPost.content && <div className="h-32 truncate text-wrap px-5 text-sm">
-                            {firstPost.content}
-                        </div>}
+                <Link href={`/author/${authorWithPosts.name.toLowerCase()}/post/${firstPost.id}`}>
+                    <div className="w-full flex justify-center mt-6 px-6">
+                        {firstPost.photo && (
+                            <Image
+                                src={firstPost.photo}
+                                height={100}
+                                width={100}
+                                alt={`${name} Recent Post Photo`}
+                                className="w-32 h-32 object-cover rounded-lg shadow-md"
+                            />
+                        )}
+                        {firstPost.content && (
+                            <div className="ml-6 h-32 overflow-hidden text-gray-700 text-sm">
+                                {firstPost.content}
+                            </div>
+                        )}
                     </div>
                 </Link>
-                <Link
-                    href={`/author/${authorWithPosts.name.toLowerCase()}/post/${firstPost.id}`}>
-                    <div className="w-full p-3" >
-                        <div className="text-lg font-roboto font-bold ">
+
+                <Link href={`/author/${authorWithPosts.name.toLowerCase()}/post/${firstPost.id}`}>
+                    <div className="w-full px-6 bg-gray-50 rounded-b-lg">
+                        <div className="text-lg font-roboto mb-3 text-gray-800">
                             Tasks:
                         </div>
-                        <div>
-                            <ul className="ml-10 text-balance h-32 list-disc text-sm">
+                        <div className="rounded-lg bg-white shadow-md p-4 max-w-md h-48 overflow-auto border border-gray-200">
+                            <ul className="space-y-2 text-gray-700 text-sm list-inside list-disc">
                                 {todayTasks?.map((task) => {
-                                    const complete = task.phase === 'complete'
+                                    const complete = task.phase === 'complete';
 
                                     return (
-                                        <li key={task.id} className={`${complete && 'line-through'}`}>
+                                        <li
+                                            key={task.id}
+                                            className={`${complete ? 'line-through text-gray-400' : 'text-gray-800'} font-medium`}
+                                        >
                                             {task.content}
                                         </li>
-                                    )
+                                    );
                                 })}
                             </ul>
                         </div>
-                        {/*
-                    <div className="mt-3 h-24 overflow-hidden">
-                        <div className="text-md font-roboto font-bold text-accent italic">Roll Over:</div>
-                        <ul className="ml-2">
-                            <TaskList rollOverTasks={rollOverTasks} authorName={authorWithPosts.name} />
-                        </ul>
-                    </div>
-                    */}
                     </div>
                 </Link>
+            </div>
 
-            </div >
         )
     }
 

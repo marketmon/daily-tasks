@@ -3,7 +3,7 @@ export default function Loading() {
     return (
         <div className="w-full h-screen bg-sand flex items-center justify-center">
             <span className="loader m-10"></span>
-            <p className="font-radley">Loading! Be ready in a moment!</p>
+            <p className="font-roboto">Loading! Be ready in a moment!</p>
         </div>
     )
 
