@@ -176,14 +176,14 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                                         }
                                     }}
                                 >
-                                    Delete Post
+                                    Delete
                                 </button>
                             )}
 
                             {!photo && (
                                 <Link
                                     href={`/manage/post/edit/${postId}/photo`}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                                    className="px-2 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
                                 >
                                     Upload Photo
                                 </Link>
@@ -217,10 +217,10 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                                         />
                                         <button
                                             type="button"
-                                            className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                                            className="px-2 py-1 text-2xl text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
                                             onClick={() => handleDeleteTask(taskId)}
                                         >
-                                            Remove
+                                            X
                                         </button>
                                     </div>
                                 ))}
@@ -240,10 +240,10 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                                         />
                                         <button
                                             type="button"
-                                            className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                                            className="px-3 py-1 text-2xl text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
                                             onClick={() => handleDeleteNewTask(index)}
                                         >
-                                            Remove
+                                            X
                                         </button>
                                     </div>
                                 ))}
@@ -258,10 +258,10 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                                     />
                                     <button
                                         type="button"
-                                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                                        className="px-3 py-1 text-2xl bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
                                         onClick={handleAddTask}
                                     >
-                                        Add Task
+                                        +
                                     </button>
                                 </div>
                             </div>
