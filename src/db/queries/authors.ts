@@ -28,3 +28,64 @@ export async function fetchAuthorByName(name: string): Promise<AuthorWithPosts |
 
     return author
 }
+
+type AuthorWithPaginatedPosts = {
+    id: string;
+    name: string;
+    post: {
+        content: string;
+        id: string;
+        createdAt: Date;
+        task: {
+            id: string;
+            content: string;
+            phase: string;
+            createdAt: Date;
+            updatedAt: Date;
+            postId: string | null;
+        }[];
+        photo: string;
+    }[];
+    _count: {
+        post: number;
+    };
+}
+
+export async function fetchAuthorPosts(
+    name: string,
+    page: number = 1,
+    pageSize: number = 12
+): Promise<AuthorWithPaginatedPosts | null> {
+    const skip = (page - 1) * pageSize;
+
+    const author = await db.author.findFirst({
+        where: {
+            name
+        },
+        include: {
+            post: {
+                select: {
+                    content: true,
+                    id: true,
+                    createdAt: true,
+                    task: true,
+                    photo: true
+                },
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take: pageSize
+            },
+            _count: {
+                select: {
+                    post: true
+                }
+            }
+        }
+    });
+
+    if (!author) {
+        notFound();
+    }
+
+    return author;
+}

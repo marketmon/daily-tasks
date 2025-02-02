@@ -16,7 +16,7 @@ export default async function EditPage({ params }: PostFetchProps) {
 
     if (post) {
         return (
-            <div className="z-50 absolute top-0 left-0 bg-base w-screen">
+            <div className="z-50 absolute top-0 left-0 bg-white w-screen">
                 <div className="p-2">
                     <Link href="/manage" className="">
                         <MainButton content="CANCEL" />

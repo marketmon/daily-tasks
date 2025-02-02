@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HomeLayout({
     children,
     melissa,
@@ -16,6 +18,11 @@ export default function HomeLayout({
                 {melissa}
                 {ethan}
                 {turner}
+            </div>
+            <div className="text-center text-sm font-poppins py-5 italic">
+                <Link href="/about">
+                    what is this?
+                </Link>
             </div>
         </div>
     )

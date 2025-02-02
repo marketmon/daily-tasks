@@ -2,6 +2,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { updateTaskPhase } from "@/app/actions/tasks"
+import { useState } from 'react'
 
 interface Author {
     name: string;
@@ -29,93 +30,124 @@ interface IndividualCardContentProps {
     isOwner: boolean;
 }
 
+export default function IndividualCardContent({ authorName, post, isOwner }: IndividualCardContentProps) {
+    const [isUpdating, setIsUpdating] = useState<string | null>(null);
 
-export default function IndividualCardContent(props: IndividualCardContentProps) {
+    const completedTasks = post.task.filter(task => task.phase === 'complete');
+    const inProgressTasks = post.task.filter(task => task.phase === 'in progress');
 
-    const { authorName, post, isOwner } = props;
+    async function handleTaskUpdate(task: Task) {
+        if (!task.id || isUpdating) return;
 
-    const completedTasks = post.task.filter(task => task.phase === 'complete')
-    const inProgressTasks = post.task.filter(task => task.phase === 'in progress')
-
-    function handleClick(task: Task) {
-
-        updateTaskPhase(task);
+        setIsUpdating(task.id);
+        try {
+            await updateTaskPhase(task);
+        } catch (error) {
+            console.error('Failed to update task:', error);
+        } finally {
+            setIsUpdating(null);
+        }
     }
 
     return (
-        <div>
-            <div className="w-full text-center font-bold font-rubik italic text-4xl text-accent">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+            <div className="bg-white rounded-lg shadow p-6">
+                {/* Author Header */}
                 <Link
-                    key={authorName}
                     href={`/author/${authorName.toLowerCase()}`}
-                    className=""
+                    className="block text-center mb-8"
                 >
-                    {authorName.toUpperCase()}
+                    <h1 className="font-rubik italic text-4xl text-accent hover:opacity-80 transition-opacity">
+                        {authorName.toUpperCase()}
+                    </h1>
                 </Link>
-            </div>
-            <div className="w-full flex justify-center">
-                <div className="md:w-4/5 w-full mt-5 md:flex">
-                    <div className="md:w-1/3 w-5/6 mx-auto">
-                        {post.photo &&
+
+                {/* Content Grid */}
+                <div className="grid md:grid-cols-3 gap-8">
+                    {/* Image Section */}
+                    {post.photo && (
+                        <div className="md:col-span-1">
                             <Image
                                 src={post.photo}
-                                height={100}
-                                width={100}
-                                alt="Melissa First Post Photo"
-                                className="w-full aspect-square object-contain"
-                            />}
-                    </div>
-                    <div className="md:w-2/3 md:px-10 px-1 w-5/6 mt-2 mx-auto">
-                        <div className="font-roboto text-xl">
-                            <div className=" text-lg font-poppins">
-                                {post.content}
-                            </div>
+                                height={400}
+                                width={400}
+                                alt={`Photo by ${authorName}`}
+                                className="w-full rounded-lg object-cover"
+                            />
                         </div>
+                    )}
+
+                    {/* Content and Tasks Section */}
+                    <div className={`${post.photo ? 'md:col-span-2' : 'md:col-span-3'}`}>
+                        {/* Post Content */}
+                        {post.content && (
+                            <div className="mb-8">
+                                <div className="font-roboto text-xl">
+                                    <div className="font-poppins text-lg text-gray-700">
+                                        {post.content}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Tasks Section */}
                         <div>
-                            <div className="font-roboto text-xl font-bold mt-5">
+                            {/* In Progress Tasks */}
+                            <div className="font-roboto text-xl font-bold mb-4">
                                 Tasks:
                             </div>
-                            <div className="font-normal text-lg">
-                                <ul className="ml-10 list-disc">
-                                    {inProgressTasks.map((task) => {
-                                        return (
-                                            <div key={task.id} className="font-poppins">
-                                                {isOwner ?
-                                                    <li onClick={() => { handleClick(task) }} className="hover:line-through hover:cursor-pointer">
-                                                        {task.content}
-                                                    </li>
-                                                    :
-                                                    <li>
-                                                        {task.content}
-                                                    </li>
-                                                }
-                                            </div>
-                                        )
-                                    })}
-                                </ul>
-                                <br></br>
-                                <span className="font-bold italic text-lg font-roboto">Complete:</span>
+                            <div className="space-y-4">
+                                {/* In Progress Tasks */}
+                                <div className="bg-gray-50 rounded p-4">
+                                    <h2 className="font-roboto text-xl font-bold text-gray-800 mb-4">
+                                        In Progress
+                                    </h2>
+                                    <ul className="space-y-2">
+                                        {inProgressTasks.map((task) => (
+                                            <li
+                                                key={task.id}
+                                                className={`font-poppins text-lg ${isOwner ? 'cursor-pointer' : ''
+                                                    }`}
+                                            >
+                                                <div
+                                                    onClick={() => isOwner && handleTaskUpdate(task)}
+                                                    className={`p-2 rounded ${isOwner ? 'hover:bg-gray-100' : ''
+                                                        } ${isUpdating === task.id ? 'opacity-50' : ''
+                                                        }`}
+                                                >
+                                                    • {task.content}
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
 
-                                <ul className="ml-10 list-disc">
-                                    {completedTasks.map((task) => {
-                                        return (
-                                            <div key={task.id} className="font-poppins text-sm">
-                                                {isOwner ?
-                                                    <li onClick={() => { handleClick(task) }} className="hover:line-through hover:cursor-pointer">
-                                                        {task.content}
-                                                    </li>
-                                                    :
-                                                    <li>
-                                                        {task.content}
-                                                    </li>
-                                                }
-                                            </div>
-                                        )
-                                    })}
-                                </ul>
+                                {/* Completed Tasks */}
+                                <div className="bg-gray-50 rounded p-4">
+                                    <h2 className="font-roboto text-xl font-bold text-gray-800 mb-4">
+                                        Complete
+                                    </h2>
+                                    <ul className="space-y-2">
+                                        {completedTasks.map((task) => (
+                                            <li
+                                                key={task.id}
+                                                className={`font-poppins text-base text-gray-500 line-through ${isOwner ? 'cursor-pointer' : ''
+                                                    }`}
+                                            >
+                                                <div
+                                                    onClick={() => isOwner && handleTaskUpdate(task)}
+                                                    className={`p-2 rounded ${isOwner ? 'hover:bg-gray-100' : ''
+                                                        } ${isUpdating === task.id ? 'opacity-50' : ''
+                                                        }`}
+                                                >
+                                                    • {task.content}
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

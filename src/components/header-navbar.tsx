@@ -13,11 +13,13 @@ export default async function HeaderNavBar() {
     return (
         <div className="w-full p-2 mb-2 flex font-radley font-medium tracking-wide bg-opacity-50 rounded">
             <div className="w-1/2 flex gap-3 items-center">
-                <Link href='https://panbo.app'>
-                    <Image src="/favicon.ico" alt="panbo logo" height={40} width={40} />
-                </Link>
                 <Link href='/'>
-                    <MainButton content="HOME" />
+                    <div className="flex items-center">
+                        <Image src="/favicon.ico" alt="panbo logo" height={40} width={40} />
+                        <div className="font-semibold italic font-rubik">
+                            PANBO DAILY
+                        </div>
+                    </div>
                 </Link>
             </div>
             <div className="w-1/2 flex justify-end">

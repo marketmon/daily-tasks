@@ -53,6 +53,7 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
 
     const router = useRouter();
 
+    // ... (keeping all the handler functions unchanged)
     const handlePostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setPostContent(e.target.value);
         setIsPostContentChanged(e.target.value !== postOriginal.content);
@@ -76,6 +77,7 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
     };
 
     const handleAddTask = () => {
+        if (!newTaskContent.trim()) return;
         setNewTasks((prev) => [...prev, newTaskContent]);
         setNewTaskContent('');
     };
@@ -95,30 +97,25 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         const formData = new FormData(e.currentTarget);
 
         try {
-            // Handle post content update
             if (isPostContentChanged && postOriginal.id) {
                 formData.append('postContent', postContent);
                 formData.append('postId', String(postOriginal.id));
                 await updatePost(formData);
             }
 
-            // Handle changed tasks
             if (changedTasks.length > 0) {
                 formData.append('tasks', JSON.stringify(changedTasks));
                 await updateTasksContent(formData);
             }
 
-            // Handle deleted tasks
             if (deletedTasks.length > 0) {
                 formData.append('deletedTasks', JSON.stringify(deletedTasks));
                 await deleteTask(formData);
             }
 
-            // Handle new tasks
             if (newTasks.length > 0) {
                 const updatedArray: Task[] = newTasks.map(content => ({
                     content,
@@ -130,7 +127,6 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
                 await createTaskSimplified(formData);
             }
 
-            // Redirect after processing
             if (postOriginal?.author?.name) {
                 router.push(`/author/${postOriginal.author.name}/post/${postOriginal.id}`);
             } else {
@@ -142,128 +138,146 @@ export default function EditPostForm({ post }: IndividualCardContentProps) {
         }
     };
 
-    if (postOriginal) {
-        const postId = postOriginal.id;
-        const photo = postOriginal.photo;
+    if (!postOriginal) return null;
 
-        return (
-            <form onSubmit={handleSubmit}>
-                {error && <div className="bg-red-500 text-white p-2 mb-4">{error}</div>}
-                <div className="w-full flex justify-between">
+    const postId = postOriginal.id;
+    const photo = postOriginal.photo;
 
-                    <div>
-                        {postId && (
-                            <button
-                                type="button"
-                                className="bg-red-500 text-white p-2 rounded"
-                                onClick={async (e) => {
-                                    const confirmed = window.confirm("Are you sure you want to delete this post?");
-                                    if (!confirmed) {
-                                        e.preventDefault();
-                                        return;
-                                    }
+    return (
+        <div className="min-h-screen bg-gray-50 py-8 px-4">
+            <div className="max-w-3xl mx-auto">
+                <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
+                    {error && (
+                        <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700">
+                            {error}
+                        </div>
+                    )}
 
-                                    try {
-                                        if (photo) {
-                                            await deletePostAndPhoto(postId, photo);
-                                        } else {
-                                            await deletePost(postId);
+                    <div className="flex items-center justify-between mb-8">
+                        <h1 className="text-2xl font-semibold text-gray-800">Edit Post</h1>
+                        <div className="flex gap-3">
+                            {postId && (
+                                <button
+                                    type="button"
+                                    className="px-4 py-2 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors duration-200"
+                                    onClick={async () => {
+                                        const confirmed = window.confirm("Are you sure you want to delete this post?");
+                                        if (!confirmed) return;
+
+                                        try {
+                                            if (photo) {
+                                                await deletePostAndPhoto(postId, photo);
+                                            } else {
+                                                await deletePost(postId);
+                                            }
+                                        } catch (err) {
+                                            console.error('Error deleting post:', err);
+                                            setError('An error occurred while deleting the post. Please try again.');
                                         }
-                                    } catch (err) {
-                                        e.preventDefault();
-                                        console.error('Error deleting post:', err);
-                                        setError('An error occurred while deleting the post. Please try again.');
-                                    }
-                                }}
-                            >
-                                Delete
-                            </button>
-                        )}
-                    </div>
+                                    }}
+                                >
+                                    Delete Post
+                                </button>
+                            )}
 
-                    {!photo && <Link
-                        href={`/manage/post/edit/${postId}/photo`}>
-                        <div className="bg-blue-500 text-white px-2">
-                            UPLOAD PHOTO
+                            {!photo && (
+                                <Link
+                                    href={`/manage/post/edit/${postId}/photo`}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                                >
+                                    Upload Photo
+                                </Link>
+                            )}
                         </div>
-                    </Link>}
-
-                    <button type="submit" className="bg-green-500 text-white p-2 rounded">
-                        Save
-                    </button>
-                </div>
-                <div className="mt-5">
-                    <div className="mt-5">
-                        Description:
-                        <textarea
-                            value={postContent}
-                            onChange={handlePostContentChange}
-                            className="border w-full mt-2 p-2 rounded h-32"
-                        />
                     </div>
-                    <div className="mt-5">
-                        Existing Tasks:
-                        {Object.entries(taskContents).map(([taskId, content]) => (
-                            <div key={taskId} className="mt-2 flex items-center">
-                                <input
-                                    type="text"
-                                    value={content}
-                                    onChange={(e) => handleTaskContentChange(taskId, e.target.value)}
-                                    className="border w-full p-2 rounded"
-                                />
-                                <button
-                                    type="button"
-                                    className="bg-red-500 text-white h-8 w-8 rounded ml-2"
-                                    onClick={() => handleDeleteTask(taskId)}
-                                >
-                                    X
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="mt-5">
-                        New Tasks:
-                        {newTasks.map((content, index) => (
-                            <div key={index} className="mt-2 flex items-center">
 
-                                <input
-                                    type="text"
-                                    value={content}
-                                    onChange={(e) => handleNewTaskContentChange(index, e.target.value)}
-                                    className="border w-full p-2 rounded"
-                                />
-                                <button
-                                    type="button"
-                                    className="bg-red-500 text-white h-8 w-8 ml-2 rounded"
-                                    onClick={() => handleDeleteNewTask(index)}
-                                >
-                                    X
-                                </button>
-
-                            </div>
-                        ))}
-                        <div className="mt-2">
-                            <input
-                                type="text"
-                                value={newTaskContent}
-                                onChange={(e) => setNewTaskContent(e.target.value)}
-                                className="border w-full p-2 rounded"
-                                placeholder="New task content"
+                    <div className="space-y-6">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Description
+                            </label>
+                            <textarea
+                                value={postContent}
+                                onChange={handlePostContentChange}
+                                className="w-full h-32 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200"
+                                placeholder="Enter post description..."
                             />
-                            <button
-                                type="button"
-                                className="bg-blue-500 text-white p-2 mr-2 mt-2 rounded"
-                                onClick={handleAddTask}
-                            >
-                                Add
-                            </button>
+                        </div>
 
+                        <div>
+                            <h2 className="text-lg font-medium text-gray-800 mb-4">Existing Tasks</h2>
+                            <div className="space-y-3">
+                                {Object.entries(taskContents).map(([taskId, content]) => (
+                                    <div key={taskId} className="flex items-center gap-2">
+                                        <input
+                                            type="text"
+                                            value={content}
+                                            onChange={(e) => handleTaskContentChange(taskId, e.target.value)}
+                                            className="flex-1 px-4 py-2 text-gray-700 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                        />
+                                        <button
+                                            type="button"
+                                            className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                                            onClick={() => handleDeleteTask(taskId)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2 className="text-lg font-medium text-gray-800 mb-4">New Tasks</h2>
+                            <div className="space-y-3">
+                                {newTasks.map((content, index) => (
+                                    <div key={index} className="flex items-center gap-2">
+                                        <input
+                                            type="text"
+                                            value={content}
+                                            onChange={(e) => handleNewTaskContentChange(index, e.target.value)}
+                                            className="flex-1 px-4 py-2 text-gray-700 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                        />
+                                        <button
+                                            type="button"
+                                            className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                                            onClick={() => handleDeleteNewTask(index)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                ))}
+
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="text"
+                                        value={newTaskContent}
+                                        onChange={(e) => setNewTaskContent(e.target.value)}
+                                        className="flex-1 px-4 py-2 text-gray-700 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                        placeholder="Enter new task content..."
+                                    />
+                                    <button
+                                        type="button"
+                                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                                        onClick={handleAddTask}
+                                    >
+                                        Add Task
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
-        );
-    }
 
-    return null;
+                    <div className="mt-8 flex justify-end">
+                        <button
+                            type="submit"
+                            className="px-8 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors duration-200"
+                        >
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
 }

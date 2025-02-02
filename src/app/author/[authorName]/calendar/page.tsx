@@ -1,62 +1,106 @@
 import Image from "next/image";
-import { fetchAuthorByName } from "@/db/queries/authors"
-import { formatPostDate } from "@/app/utils/post-date-format";
 import Link from "next/link";
+import { fetchAuthorPosts } from "@/db/queries/authors";
+import { formatPostDate } from "@/app/utils/post-date-format";
+import { MainButton } from "@/components/buttons/buttons";
 
 interface PostFetchProps {
     params: {
         authorName: string,
         postId: string
+    },
+    searchParams: {
+        page?: string
     }
 }
 
-export default async function CalendarPage({ params }: PostFetchProps) {
-
+export default async function CalendarPage({ params, searchParams }: PostFetchProps) {
     const authorName = params.authorName.charAt(0).toLocaleUpperCase() + params.authorName.slice(1);
+    const currentPage = Number(searchParams.page) || 1;
+    const pageSize = 12;
 
-    const authorWithPosts = await fetchAuthorByName(authorName)
+    const authorWithPosts = await fetchAuthorPosts(authorName, currentPage, pageSize);
+
     if (authorWithPosts) {
-        const posts = authorWithPosts.post
+        const posts = authorWithPosts.post;
+        const totalPosts = authorWithPosts._count.post;
+        const totalPages = Math.ceil(totalPosts / pageSize);
+
         if (posts) {
             return (
-                <div className=" mx-2 md:mx-10 my-3 p-5">
-                    <div className="font-rubik text-3xl italic text-center">
-                        {authorName}&apos;s Posts
+                <div className="z-50 absolute top-0 left-0 bg-white w-screen">
+                    <div className="w-full p-3 flex justify-between font-radley font-medium tracking-wide">
+                        <div className="flex gap-2">
+                            <Link href='/'>
+                                <MainButton content="BACK" />
+                            </Link>
+                            <Link href='/'>
+                                <MainButton content="HOME" />
+                            </Link>
+                        </div>
                     </div>
-                    <div className="flex justify-center mt-5">
-                        <div className="grid grid-cols-3 md:grid-cols-5 gap-2 md:w-4/5 w-full">
-                            {posts.map((post) => {
-                                return (
+                    <div className="mt-5">
+                        <div className="font-rubik font-bold text-2xl m-5">
+                            {authorName}&apos;s Posts
+                        </div>
+                        <div className="flex flex-col items-center mt-5">
+                            <div className="grid grid-cols-3 md:grid-cols-6 gap-2 md:w-4/5 w-full">
+                                {posts.map((post) => (
                                     <div key={post.id} className="sm:w-32 w-24 font-roboto shadow hover:shadow-lg rounded border-black border-2">
                                         <Link
                                             key={authorName + '+' + post.id}
                                             href={`/author/${authorName.toLowerCase()}/post/${post.id}`}
                                             className=""
                                         >
-
-                                            {post?.photo === '' ?
-                                                <div className="w-24 h-24 mt-2 object-cover mx-auto
-                                                overflow-clip p-0.5 text-xs font-roboto text-center">
+                                            {post?.photo === '' ? (
+                                                <div className="w-24 h-24 mt-2 object-cover mx-auto overflow-clip p-0.5 text-xs font-roboto text-center">
                                                     {post.content.substring(0, 64)}...
                                                 </div>
-                                                :
+                                            ) : (
                                                 <Image
                                                     src={post?.photo}
                                                     width={128}
                                                     height={128}
                                                     alt={post.id + 'photo'}
                                                     className="w-32 aspect-square object-cover"
-                                                />}
-                                            <div className="text-center py-1 text-xs md:text-sm font-bold"
-                                            >{formatPostDate(post.createdAt)}</div>
+                                                />
+                                            )}
+                                            <div className="text-center py-1 text-xs font-bold font-poppins">
+                                                {formatPostDate(post.createdAt)}
+                                            </div>
                                         </Link>
                                     </div>
-                                )
-                            })}
+                                ))}
+                            </div>
+
+                            {/* Pagination Controls */}
+                            <div className="flex gap-2 mt-6 mb-8">
+                                {currentPage > 1 && (
+                                    <Link
+                                        href={`/author/${authorName.toLowerCase()}/calendar?page=${currentPage - 1}`}
+                                        className="px-4 py-2 border border-black rounded hover:bg-gray-100"
+                                    >
+                                        Previous
+                                    </Link>
+                                )}
+
+                                <div className="flex items-center px-4">
+                                    Page {currentPage} of {totalPages}
+                                </div>
+
+                                {currentPage < totalPages && (
+                                    <Link
+                                        href={`/author/${authorName.toLowerCase()}/calendar?page=${currentPage + 1}`}
+                                        className="px-4 py-2 border border-black rounded hover:bg-gray-100"
+                                    >
+                                        Next
+                                    </Link>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
-            )
+            );
         }
     }
 }

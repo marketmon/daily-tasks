@@ -16,7 +16,7 @@ export default async function CreatePostPage() {
     const authorId = session?.user?.id
 
     return (
-        <div className="z-50 absolute top-0 left-0 w-screen gradient-background">
+        <div className="z-50 absolute top-0 left-0 w-screen bg-white">
             <div className=" md:mx-10 mx-2 my-3 p-5">
                 <div className="w-full flex font-radley font-medium tracking-wide mb-3">
                     <div className="w-1/2">

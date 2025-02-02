@@ -13,7 +13,7 @@ export default function CreateTasksPage({ params }: PostsFetchProps) {
     const postId = params.postId
 
     return (
-        <div className="z-50 absolute top-0 left-0 w-screen gradient-background">
+        <div className="z-50 absolute top-0 left-0 w-screen bg-white">
             <div className=" md:mx-10 mx-2 my-3 md:p-5 p-2">
                 <Link href="/manage">
                     <MainButton content="CANCEL" />
