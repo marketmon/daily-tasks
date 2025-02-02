@@ -12,18 +12,18 @@ export default function SignedIn() {
                 className="hover:cursor-pointer"
                 onClick={() => { router.push('/manage/post/create') }}
             >
-                <MainButton content="CREATE" />
+                <MainButton content="Create" />
             </div>
             <button
                 className="hover:cursor-pointer"
                 onClick={() => { router.push('/manage') }}
             >
-                <MainButton content="MANAGE" />
+                <MainButton content="Manage" />
             </button>
             <button
                 className="hover:cursor-pointer"
                 onClick={() => { signOut() }}>
-                <MainButton content="SIGN OUT" />
+                <MainButton content="Sign Out" />
             </button>
 
         </div>

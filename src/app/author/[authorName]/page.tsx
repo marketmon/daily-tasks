@@ -38,8 +38,6 @@ export default async function AuthorPage({ params }: PostFetchProps) {
 
         const authorKey = authorName as keyof typeof descriptions;
 
-
-
         return (
             <div className="mx-4 md:mx-12 p-6 bg-gray-50 rounded-lg shadow-lg">
                 {/* Author Names Section */}

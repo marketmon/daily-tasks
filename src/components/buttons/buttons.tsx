@@ -12,7 +12,7 @@ export function MainButton({ content }: { content: string }) {
 
 
     return (
-        <div className="rounded border-2 bg-white px-2 font-poppins w-fit hover:scale-105">
+        <div className="text-sm md:text-md rounded border-2 bg-white px-2 font-poppins w-fit hover:scale-105">
             {content}
         </div>
     )
